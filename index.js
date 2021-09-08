@@ -16,7 +16,7 @@ app.get('/', (_request, response) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Online in port ${PORT}`);
+  console.log('Online');
 });
 
 app.get('/talker', async (req, res) => {
