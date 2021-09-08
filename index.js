@@ -39,5 +39,3 @@ app.get('/talker/:id', async (req, res) => {
 });
 
 app.post('/login', emailValidator, passwordValidator, generateToken);
-
-app.post('/talker');
