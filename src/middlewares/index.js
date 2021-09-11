@@ -1,8 +1,8 @@
 const crypto = require('crypto');
 
 const generateToken = (req, res) => {
-  const randomToken = crypto.randomBytes(8).toString('hex');
-  return res.status(200).json({ randomToken });
+  const token = crypto.randomBytes(8).toString('hex');
+  return res.status(200).json({ token });
 };
 
 const emailValidator = (req, res, next) => {
@@ -21,7 +21,7 @@ const emailValidator = (req, res, next) => {
 const passwordValidator = (req, res, next) => {
   const { password } = req.body;
   if (!password) {
-    return res.status(400).json({ message: 'O campo "password" é origatório' });
+    return res.status(400).json({ message: 'O campo "password" é obrigatório' });
   }
   if (password.length < 6) {
     return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
