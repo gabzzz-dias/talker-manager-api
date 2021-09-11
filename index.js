@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
+const { emailValidator, passwordValidator, generateToken } = require('./src/middlewares');
 
 const talkersObj = ('./talker.json');  
 
@@ -27,3 +28,16 @@ app.get('/talker', async (req, res) => {
   } 
  return res.status(200).json(response);
 });
+
+app.get('/talker/:id', async (req, res) => {
+  const talkers = await fs.readFile(talkersObj);
+  const { id } = req.params;
+  const chosenTalker = talkers.find((x) => x.id === id);
+
+  if (!chosenTalker) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  } 
+  return res.status(200).json(chosenTalker);
+});
+
+app.post('/login', emailValidator, passwordValidator, generateToken);
