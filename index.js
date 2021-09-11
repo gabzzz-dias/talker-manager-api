@@ -108,7 +108,7 @@ app.put('/talker/:id',
     const found = talkers.filter(({ name }) => name.includes(query));
   
     if (found) {
-      res.status(200).json(found);
+      return res.status(200).json(found);
     }
-    res.status(200).json(talkers);
+    return res.status(200).json(talkers);
   });
