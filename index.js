@@ -23,8 +23,9 @@ app.get('/talker', async (req, res) => {
   const talkers = await fs.readFile(talkersObj);
   const response = JSON.parse(talkers);
   
-  if (!response) return res.status(200).json(Array([]));
-
+  if (!response) {
+    return res.status(200).json(Array([]));
+  } 
  return res.status(200).json(response);
 });
 
@@ -33,8 +34,9 @@ app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
   const chosenTalker = talkers.find((x) => x.id === id);
 
-  if (!chosenTalker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-
+  if (!chosenTalker) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  } 
   return res.status(200).json(chosenTalker);
 });
 
