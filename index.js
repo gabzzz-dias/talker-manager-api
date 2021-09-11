@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
-const { emailValidator, passwordValidator, generateToken } = require('./src/middlewares');
 
 const talkersObj = ('./talker.json');  
 
