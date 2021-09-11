@@ -29,8 +29,8 @@ app.listen(PORT, () => {
 });
 
 app.get('/talker', async (req, res) => {
-  const talkers = await fs.readFile(talkersObj);
-  const response = JSON.parse(talkers);
+  const talkersJson = await fs.readFile(talkersObj);
+  const response = JSON.parse(talkersJson);
   
   if (!response) {
     return res.status(200).json(Array([]));
@@ -67,7 +67,7 @@ app.post('/talker',
     const y = { ...body, id };
     const x = [...z, y];
     fs.writeFile(talkersObj, JSON.stringify(x));
-    res.status(201).json(y);
+    return res.status(201).json(y);
 }));
 
 app.put('/talker/:id',
@@ -86,5 +86,29 @@ app.put('/talker/:id',
     const bodyModified = { ...body, id: Number(id) };
     z[currId] = bodyModified;
     fs.writeFile(talkersObj, JSON.stringify(z));
-    res.status(200).json(bodyModified);
+    return res.status(200).json(bodyModified);
   }));
+
+  app.delete('/talker/:id',
+    tokenValidator,
+    async (req, res) => {
+    const { id } = req.params;
+    const talkersJson = await fs.readFile(talkersObj);
+    const z = JSON.parse(talkersJson);
+    const currId = z.findIndex((index) => Number(id) === index.id);
+    z.splice(currId, 1);
+    fs.writeFile(talkersObj, JSON.stringify(z));
+    return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+  });
+
+  app.get('/talker/search', tokenValidator, async (req, res) => {
+    const { q } = req.query;
+    const talkersJson = await fs.readFile(talkersObj);
+    const talkers = JSON.parse(talkersJson);
+    
+    if (!q) {
+      return res.status(200).json(talkers);    
+    }
+    const eachTalker = talkers.filter(({ name }) => name.includes(q));
+    return res.status(200).json(eachTalker || {});
+  });
