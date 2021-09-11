@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const fs = require('fs').promises;
 
 const generateToken = (req, res) => {
   const token = crypto.randomBytes(8).toString('hex');
@@ -91,6 +92,24 @@ const rateValidator = (req, res, next) => {
   next();
 };
 
+function readFile() {
+  const talkers = fs.readFile('./talker.json', 'utf-8');
+  return talkers.then((data) => JSON.parse(data));
+}
+
+const talkerSearch = async (req, res) => {
+  const { q } = req.query;
+  const talkers = await readFile();
+  if (!q || q === '') {
+    return res.status(200).json(talkers);    
+  }   
+  const filteredTalkers = talkers.filter((talker) => talker.name.includes(q));
+  if (filteredTalkers.length > 0) {
+    return res.status(200).json(filteredTalkers); 
+  } 
+  return res.status(200).json(Array.from([])); 
+};
+
 module.exports = {
   generateToken,
   emailValidator,
@@ -101,4 +120,5 @@ module.exports = {
   talkValidator,
   watchAtValidator,
   rateValidator,
+  talkerSearch,
 };

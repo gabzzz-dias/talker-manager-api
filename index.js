@@ -11,6 +11,7 @@ const { emailValidator,
   talkValidator,
   watchAtValidator,
   rateValidator,
+  talkerSearch,
 } = require('./src/middlewares');
 
 const talkersObj = ('./talker.json');  
@@ -113,14 +114,4 @@ app.put('/talker/:id',
     return res.status(200).json(talkers);
   });
 
-  app.get('/search', tokenValidator, (req, res) => {
-    fs.readFileSync(talkersObj)
-    .then((response) => JSON.parse(response))
-    .then((response) => {
-      const { q } = req.query;
-      if (!q) return res.status(200).json(response);
-      const searchedTalker = response.filter((talker) => talker.name.includes(q));
-      return res.status(200).json(searchedTalker);
-    })
-    .catch((error) => { res.status(400).json(error); });
-  });  
+  app.get('/talker/search', tokenValidator, talkerSearch);
