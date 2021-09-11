@@ -1,7 +1,4 @@
 const crypto = require('crypto');
-const fs = require('fs').promises;
-
-const talkersObj = '.././talker.json';
 
 const generateToken = (req, res) => {
   const token = crypto.randomBytes(8).toString('hex');
@@ -93,20 +90,6 @@ const rateValidator = (req, res, next) => {
   }
   next();
 };
-async function findTalkers(req, res, next) {
-  try {
-    const file = await fs.readFile(talkersObj);
-
-    req.arrayTalkers = JSON.parse(file);
-
-    next();
-  } catch (error) {
-    next({
-      status: 500,
-      message: error,
-    });
-  }
-}
 
 module.exports = {
   generateToken,
@@ -118,5 +101,4 @@ module.exports = {
   talkValidator,
   watchAtValidator,
   rateValidator,
-  findTalkers,
 };

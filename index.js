@@ -10,8 +10,7 @@ const { emailValidator,
   ageValidator,
   talkValidator,
   watchAtValidator,
-  rateValidator, 
-  findTalkers,
+  rateValidator,
 } = require('./src/middlewares');
 
 const talkersObj = ('./talker.json');  
@@ -103,17 +102,13 @@ app.put('/talker/:id',
     return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
   });
 
-  app.get('/search',
-    tokenValidator,
-    findTalkers,
-    (req, res) => {
-    const { q } = req.query;
-    const { talkersArr } = req;
-
-    if (!q) {
-      return res.status(200).json(talkersArr);
-    } 
+  app.get('/search', tokenValidator, (req, res) => {
+    const query = req.query.q;
+    const talkers = JSON.parse(fs.readFileSync(talkersObj));
+    const found = talkers.filter(({ name }) => name.includes(query));
   
-    const searchTalkers = talkersArr.filter((talk) => talk.name.includes(q));  
-    res.status(200).json(searchTalkers);
+    if (found) {
+      res.status(200).json(found);
+    }
+    res.status(200).json(talkers);
   });
