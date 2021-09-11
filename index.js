@@ -115,7 +115,3 @@ app.put('/talker/:id',
     }
     return res.status(200).json(talkers);
   });
-
-  // nota de agradecimento: Esse projeto me ensinou de diversas formas a manter a calma, foi dificil pra mim desde o começo e tive inumeras dificuldades. Consegui realizá-lo com a ajuda de muitas aulas e de dois amigos de turma; Emerson Saturnino e Gabriel Essênio, com eles pude entender melhor a lógica necessária para alcançar os 100% e como montar a sintaxe dos códigos, os quais eu também consultei os Pull Requests a fins de estudo.
-  // PR Emerson: https://github.com/tryber/sd-010-b-project-talker-manager/pull/59
-  // PR Gabriel: https://github.com/tryber/sd-010-b-project-talker-manager/pull/104
