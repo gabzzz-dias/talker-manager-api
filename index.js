@@ -106,10 +106,11 @@ app.put('/talker/:id',
     async (req, res) => {
     const { q } = req.query;
     const talkersJson = await fs.readFile(talkersObj);
+    const talkers = JSON.parse(talkersJson);
     
     if (!q) {
-      return res.status(200).json(talkersJson);    
+      return res.status(200).json(talkers);    
     }
-    const eachTalker = talkersJson.filter(({ name }) => name.includes(q));
+    const eachTalker = talkers.filter(({ name }) => name.includes(q));
     return res.status(200).json(eachTalker || {});
   });
