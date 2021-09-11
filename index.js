@@ -69,3 +69,22 @@ app.post('/talker',
     fs.writeFile(talkersObj, JSON.stringify(x));
     res.status(201).json(y);
 }));
+
+app.put('/talker/:id',
+  tokenValidator,
+  nameValidator,
+  ageValidator,
+  talkValidator,
+  watchAtValidator,
+  rateValidator,
+  rescue(async (req, res) => {
+    const { body } = req;
+    const { id } = req.params;
+    const talkersJson = await fs.readFile(talkersObj);
+    const z = JSON.parse(talkersJson);
+    const currId = z.findIndex((index) => Number(id) === index.id);
+    const bodyModified = { ...body, id: Number(id) };
+    z[currId] = bodyModified;
+    fs.writeFile(talkersObj, JSON.stringify(z));
+    res.status(200).json(bodyModified);
+  }));
