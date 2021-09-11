@@ -30,6 +30,8 @@ app.listen(PORT, () => {
   console.log('Online');
 });
 
+app.get('/talker/search', tokenValidator, talkerSearch);
+
 app.get('/talker', async (req, res) => {
   const talkersJson = await fs.readFile(talkersObj);
   const response = JSON.parse(talkersJson);
@@ -113,5 +115,3 @@ app.put('/talker/:id',
     }
     return res.status(200).json(talkers);
   });
-
-  app.get('/talker/search', tokenValidator, talkerSearch);
