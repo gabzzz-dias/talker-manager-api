@@ -101,14 +101,15 @@ app.put('/talker/:id',
     return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
   });
 
-  app.get('/talker/search', tokenValidator, async (req, res) => {
+  app.get('/talker/search',
+    tokenValidator,
+    async (req, res) => {
     const { q } = req.query;
     const talkersJson = await fs.readFile(talkersObj);
-    const talkers = JSON.parse(talkersJson);
     
     if (!q) {
-      return res.status(200).json(talkers);    
+      return res.status(200).json(talkersJson);    
     }
-    const eachTalker = talkers.filter(({ name }) => name.includes(q));
+    const eachTalker = talkersJson.filter(({ name }) => name.includes(q));
     return res.status(200).json(eachTalker || {});
   });
