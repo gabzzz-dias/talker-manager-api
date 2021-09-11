@@ -2,7 +2,15 @@ const express = require('express');
 const rescue = require('express-rescue');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
-const { emailValidator, passwordValidator, generateToken } = require('./src/middlewares');
+const { emailValidator,
+  passwordValidator,
+  generateToken,
+  tokenValidator,
+  nameValidator,
+  ageValidator,
+  talkValidator,
+  watchAtValidator,
+  rateValidator } = require('./src/middlewares');
 
 const talkersObj = ('./talker.json');  
 
@@ -43,3 +51,21 @@ app.get('/talker/:id', rescue(async (req, res) => {
 }));
 
 app.post('/login', emailValidator, passwordValidator, generateToken);
+
+app.post('/talker',
+  tokenValidator,
+  nameValidator,
+  ageValidator,
+  talkValidator,
+  watchAtValidator,
+  rateValidator,
+  rescue(async (req, res) => {
+    const { body } = req;
+    const talkersJson = await fs.readFile(talkersObj);
+    const z = JSON.parse(talkersJson);
+    const id = z.length + 1;
+    const y = { ...body, id };
+    const x = [...z, y];
+    fs.writeFile(talkersObj, JSON.stringify(x));
+    res.status(201).json(y);
+}));
